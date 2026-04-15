@@ -1,0 +1,13 @@
+# Personal research output (remove this line to track your research in git)
+projects/*
+!projects/_example/
+
+# Obsidian workspace state (personal, not shareable)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.obsidian/plugins/
+
+# OS
+.DS_Store
+Thumbs.db
