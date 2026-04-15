@@ -1,0 +1,23 @@
+{
+  "name": "better-ai-research",
+  "version": "1.0.0",
+  "description": "A local research engine powered by Claude Code CLI and Obsidian. Takes one research question and produces a multi-angle analysis through 6 analytical lenses.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sungkhum/better-ai-research.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sungkhum/better-ai-research/issues"
+  },
+  "homepage": "https://github.com/sungkhum/better-ai-research#readme",
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}

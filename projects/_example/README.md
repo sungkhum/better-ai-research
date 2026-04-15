@@ -28,6 +28,19 @@ A completed project would contain:
 | `deep-dive.md` | Full report organized by lens with cross-references |
 | `key-players.md` | Countries, institutions, researchers, and policymakers that matter |
 | `open-questions.md` | What we still don't know — seeds for future research |
+| `why-are-birth-rates-collapsing-globally.docx` | Formatted research paper (auto-generated) |
+
+## Source Citation Format
+
+All source citations in lens files and output files MUST use markdown link syntax so they become proper footnotes in the generated DOCX:
+
+```markdown
+# Correct — URL is present, will become a footnote
+[World Bank Fertility Data](https://data.worldbank.org/indicator/SP.DYN.TFRT.IN) (Tier 1)
+
+# Wrong — plain text, no URL, will NOT become a footnote
+World Bank Fertility Data (Tier 1)
+```
 
 ## How the Lenses Would Interact
 
@@ -39,6 +52,23 @@ The power of this system is in the tensions between lenses:
 - **First Principles** says: "This suggests the drivers are cultural/identity-based, not economic"
 
 Neither lens is wrong. The truth lives in the tension between them.
+
+## DOCX Generation
+
+After all output files are written, the research paper is generated automatically:
+
+```bash
+node scripts/generate-paper.js projects/YYYY-MM-DD-topic-slug/
+```
+
+This produces a formatted Word document with:
+- Title page with research question and metadata
+- All sections from the deep dive, synthesis, and other output files
+- Inline footnotes for every `[title](url)` source citation
+- A bibliography section listing all sources from all lens files
+- Headers, footers, and page numbers
+
+The filename is derived from the project title (e.g., `why-are-birth-rates-collapsing-globally.docx`).
 
 ## Knowledge Capture
 

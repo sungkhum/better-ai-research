@@ -84,6 +84,7 @@ For EACH selected lens in order (default: technical → economic → historical 
    - Confidence level: high / medium / low
    - Surprises — what was unexpected from this angle
    - Contradictions with previous lenses
+   - **SOURCE FORMAT**: All source citations MUST use markdown link syntax: `[Source Title](https://url)`. This is required for DOCX footnote generation. Example: `[9Marks Analysis](https://www.9marks.org/article/example/) (Tier 2)`. Never use plain-text source references like "9Marks (Tier 2)" — the URL must be present.
 4. Move to the next lens
 
 **CRITICAL RULE**: Each lens must RETHINK the question, not just add more information. The technical lens and the contrarian lens should feel like they were written by two different researchers who disagree with each other. That tension is where insight lives.
@@ -107,7 +108,7 @@ For EACH selected lens in order (default: technical → economic → historical 
 2. Create `projects/YYYY-MM-DD-topic-slug/deep-dive.md`
    - Full analysis organized by lens
    - Cross-references and contradictions highlighted
-   - All sources cited with tiers
+   - All sources cited with markdown links: `[Source Title](https://url) (Tier N)` — required for DOCX footnotes
 
 3. Create `projects/YYYY-MM-DD-topic-slug/key-players.md`
    - People, organizations, countries that matter most
@@ -121,7 +122,8 @@ For EACH selected lens in order (default: technical → economic → historical 
 5. Append new concepts to [[concepts]]
 6. Append new data points to [[data-points]]
 7. Append project entry to [[research-log]]
-8. Update project README status to: complete
+8. Generate DOCX research paper: `node scripts/generate-paper.js projects/YYYY-MM-DD-topic-slug/`
+9. Update project README status to: complete
 
 ## 4. Project Folder Structure
 
@@ -139,7 +141,8 @@ projects/YYYY-MM-DD-topic-slug/
 ├── executive-summary.md   # 500-word summary
 ├── deep-dive.md           # Full report
 ├── key-players.md         # Who matters
-└── open-questions.md      # What we still don't know
+├── open-questions.md      # What we still don't know
+└── research-paper.docx    # Formatted DOCX paper (auto-generated)
 ```
 
 ## 5. Research Depth Levels
