@@ -110,6 +110,7 @@ class FootnoteRegistry {
       config[fn.id] = {
         children: [
           new Paragraph({
+            style: "FootnoteText",
             spacing: { after: 40 },
             children: [
               new TextRun({
