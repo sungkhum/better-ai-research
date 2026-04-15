@@ -163,3 +163,16 @@ projects/YYYY-MM-DD-topic-slug/
 - 50+ sources including primary data
 - Full contradiction resolution
 - Goal: publishable analysis, decision-grade intelligence
+
+## 6. First-Time Setup
+
+On a fresh clone, the knowledge files need to be initialized from templates:
+
+```bash
+cp research-log.template.md research-log.md
+cp knowledge/concepts.template.md knowledge/concepts.md
+cp knowledge/data-points.template.md knowledge/data-points.md
+git update-index --skip-worktree research-log.md knowledge/concepts.md knowledge/data-points.md
+```
+
+The `--skip-worktree` flag tells git to never commit local changes to these files. They grow locally with each research project but the templates stay clean in the repo.

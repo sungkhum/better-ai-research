@@ -1,10 +1,7 @@
-# Research projects and personal research data — never commit
+# Research projects — never commit (contains personal research data)
 projects/*
 !projects/_example/
 *.docx
-research-log.md
-knowledge/concepts.md
-knowledge/data-points.md
 
 # Obsidian workspace state (personal, not shareable)
 .obsidian/workspace.json
