@@ -82,31 +82,48 @@ const openQuestions = readIfExists("open-questions.md") || "";
 
 class FootnoteRegistry {
   constructor() {
-    this.urlToId = new Map(); // url -> footnote id
-    this.footnotes = []; // { id, title, url }
+    this.urlToId = new Map(); // url -> footnote id (only for referenced sources)
+    this.referenced = []; // { id, title, url } — sources with inline refs
+    this.catalog = []; // { title, url } — ALL known sources for bibliography
+    this.catalogUrls = new Set();
     this.nextId = 1;
   }
 
   /**
-   * Register a source link. Returns the footnote ID.
+   * Add a source to the catalog (bibliography) without creating a footnote.
+   * Used during lens file pre-scan.
+   */
+  addToCatalog(title, url) {
+    if (!this.catalogUrls.has(url)) {
+      this.catalogUrls.add(url);
+      this.catalog.push({ title, url });
+    }
+  }
+
+  /**
+   * Register an inline source reference. Returns the footnote ID.
+   * Creates a footnote definition (only called during content rendering).
    * Deduplicates by URL — same URL always gets the same footnote number.
+   * Also adds to catalog if not already there.
    */
   register(title, url) {
+    this.addToCatalog(title, url);
     if (this.urlToId.has(url)) {
       return this.urlToId.get(url);
     }
     const id = this.nextId++;
     this.urlToId.set(url, id);
-    this.footnotes.push({ id, title, url });
+    this.referenced.push({ id, title, url });
     return id;
   }
 
   /**
    * Build the footnotes config object for the Document constructor.
+   * Only includes sources that are actually referenced inline.
    */
   toDocxConfig() {
     const config = {};
-    for (const fn of this.footnotes) {
+    for (const fn of this.referenced) {
       config[fn.id] = {
         children: [
           new Paragraph({
@@ -507,7 +524,7 @@ async function buildDocument() {
     const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
     let m;
     while ((m = linkRegex.exec(content)) !== null) {
-      registry.register(m[1], m[2]);
+      registry.addToCatalog(m[1], m[2]);
     }
   }
 
@@ -681,7 +698,7 @@ async function buildDocument() {
   }
 
   // ---- BIBLIOGRAPHY ----
-  if (registry.footnotes.length > 0) {
+  if (registry.catalog.length > 0) {
     children.push(new Paragraph({ children: [new PageBreak()] }));
     children.push(
       new Paragraph({
@@ -696,7 +713,7 @@ async function buildDocument() {
         spacing: { after: 200 },
         children: [
           new TextRun({
-            text: `${registry.footnotes.length} sources consulted across 6 analytical lenses.`,
+            text: `${registry.catalog.length} sources consulted across 6 analytical lenses.`,
             font: "Arial",
             size: 22,
             color: "666666",
@@ -705,20 +722,20 @@ async function buildDocument() {
         ],
       })
     );
-    for (const fn of registry.footnotes) {
+    for (const src of registry.catalog) {
       children.push(
         new Paragraph({
           numbering: { reference: "numbers", level: 0 },
           spacing: { before: 40, after: 40 },
           children: [
             new TextRun({
-              text: fn.title,
+              text: src.title,
               font: "Arial",
               size: 21,
               italics: true,
             }),
             new TextRun({
-              text: `. ${fn.url}`,
+              text: `. ${src.url}`,
               font: "Arial",
               size: 19,
               color: "4472C4",
@@ -921,7 +938,7 @@ async function buildDocument() {
   const outputPath = path.join(absProject, `${slug}.docx`);
   fs.writeFileSync(outputPath, buffer);
   console.log(`Research paper generated: ${outputPath}`);
-  console.log(`  ${footnoteCount} source footnotes`);
+  console.log(`  ${footnoteCount} inline footnotes, ${registry.catalog.length} bibliography entries`);
 }
 
 buildDocument().catch((err) => {
